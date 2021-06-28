@@ -1,7 +1,8 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from .database import Base
-from enum import Enum
+from enum import Enum, IntEnum
+
 
 class Vacuna(Base):
 
@@ -35,15 +36,18 @@ class ModelCondiciones(str, Enum):
     cincuentaS = "50 a 59 años SIN Factores de Riesgo"
     sesenta = "60 o más años"
 
+
 class ModelSex(str, Enum):
     femenino = "F"
     masculino = "M"
+
 
 class ModelVacunas(str, Enum):
     COVISHIELD = "COVISHIELD"
     Sinopharm = "Sinopharm"
     Sputnik = "Sputnik"
     AstraZeneca = "AstraZeneca"
+
 
 class ModelAge(str, Enum):
     desconocido = "S.I."
@@ -58,4 +62,34 @@ class ModelAge(str, Enum):
     gcien = ">=100"
 
 
+class ModelProvince(str,Enum):
+    buenos_aires = "Buenos Aires"
+    caba = "CABA"
+    catamarca = "Catamarca"
+    chaco = "Chaco"
+    chubut = "Chubut"
+    corrientes = "Corrientes"
+    cordoba = "Córdoba"
+    entre_rios = "Entre Ríos"
+    formosa = "Formosa"
+    jujuy = "Jujuy"
+    la_pampa = "La Pampa"
+    la_rioja = "La Rioja"
+    mendoza = "Mendoza"
+    misiones = "Misiones"
+    neuquen = "Neuquén"
+    rio_negro = "Río Negro"
+    sin_informar = "S.I."
+    salta = "Salta"
+    san_juan = "San Juan"
+    san_luis = "San Luis"
+    santa_cruz = "Santa Cruz"
+    santa_fe = "Santa Fe"
+    santiago_del_estero = "Santiago del Estero"
+    tierra_del_fuego = "Tierra del Fuego"
+    tucuman = "Tucumán"
 
+
+class ModelDosis(IntEnum,Enum):
+    first = 1
+    second = 2
