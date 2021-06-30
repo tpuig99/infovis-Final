@@ -30,6 +30,8 @@ tags_metadata = [
         "description": "Obtiene las vacunas filtradas por grupo etario y: condición de aplicación, provincia, vacuna, dosis."},
     {"name": "Vacunas por vacuna y otro factor",
         "description": "Obtiene las vacunas filtradas por la vacuna y: dosis, provincia, condicion y dosis, provincia y dosis."},
+    {"name": "Vacunas por provincia de residencia y provincia de jurisdiccion",
+        "description": "Obtiene las vacunas filtradas por la provincia de residencia y la provincia de aplicacion"}
 ]
 
 
@@ -171,6 +173,16 @@ def read_vacunas(age: models.ModelAge, condition: models.ModelCondiciones, db: S
     vacunas = crud.get_vacuna_by_age_condition_count(db, age, condition)
     return vacunas
 
+@app.get("/vacunas/provincia/{provincia}/provincia-aplicacion/{provincia_aplicacion}", response_model=List[schemas.Vacuna], tags=["Vacunas por provincia de residencia y provincia de jurisdiccion"])
+def read_vacunas(provincia: models.ModelProvince, provincia_aplicacion: models.ModelProvince, skip: int = 0, limit: Optional[int] = Query(None, description="No es un campo obligatorio, sin embargo por la gran cantidad de datos recomendamos darle uso."), db: Session = Depends(get_db)):
+    vacunas = crud.get_vacuna_by_provincia_application_provincia(db, provincia, provincia_aplicacion, limit=limit, skip=skip)
+    return vacunas  
+
+@app.get("/vacunas/provincia/{provincia}/provincia-aplicacion/{provincia_aplicacion}/count", tags=["Vacunas por provincia de residencia y provincia de jurisdiccion"])
+def read_vacunas(provincia: models.ModelProvince, provincia_aplicacion: models.ModelProvince, db: Session = Depends(get_db)):
+    count = crud.get_vacuna_by_provincia_application_provincia_count(db, provincia, provincia_aplicacion)
+    return count
+  
 
 @app.get("/vacunas/age/{age}/provincia/{provincia}", response_model=List[schemas.Vacuna], tags=["Vacunas por edad y otro factor"])
 def read_vacunas(age: models.ModelAge, provincia: models.ModelProvince, skip: int = 0, limit: Optional[int] = Query(None, description="No es un campo obligatorio, sin embargo por la gran cantidad de datos recomendamos darle uso."), db: Session = Depends(get_db)):

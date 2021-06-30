@@ -108,6 +108,16 @@ def get_vacuna_by_age_condition_count(db: Session, age: str, condition: str):
     return db.query(models.Vacuna.id).filter(models.Vacuna.grupo_etario == age, models.Vacuna.condicion_aplicacion == condition).count()
 
 
+# Provincia de residencia + Provincia de aplicacion
+def get_vacuna_by_provincia_application_provincia(db: Session, provincia: models.ModelProvince, provincia_aplicacion: models.ModelProvince, skip: int = 0, limit: Optional[int] = None):
+    if limit:
+        return db.query(models.Vacuna).filter(models.Vacuna.jurisdiccion_residencia == provincia, models.Vacuna.jurisdiccion_aplicacion == provincia_aplicacion).order_by(models.Vacuna.id).offset(skip).limit(limit).all()
+    return db.query(models.Vacuna).filter(models.Vacuna.jurisdiccion_residencia == provincia, models.Vacuna.jurisdiccion_aplicacion == provincia_aplicacion).all()
+
+def get_vacuna_by_provincia_application_provincia_count(db: Session, provincia: models.ModelProvince, provincia_aplicacion: models.ModelProvince):
+    return db.query(models.Vacuna.id).filter(models.Vacuna.jurisdiccion_residencia == provincia, models.Vacuna.jurisdiccion_aplicacion == provincia_aplicacion).count()
+
+
 def get_vacuna_by_age_provincia(db: Session, age: str, provincia: str, skip: int = 0, limit: Optional[int] = None):
     if limit:
         return db.query(models.Vacuna).filter(models.Vacuna.grupo_etario == age, models.Vacuna.jurisdiccion_aplicacion == provincia).order_by(models.Vacuna.id).offset(skip).limit(limit).all()
@@ -265,3 +275,7 @@ def get_vacuna_by_vacuna_provincia_dosis_fecha(db: Session, provincia: str, vacu
 
 def get_vacuna_by_vacuna_provincia_dosis_fecha_count(db: Session,  provincia: str, vacuna: str, dosis: int, fecha: str):
     return db.query(models.Vacuna.id).filter(models.Vacuna.jurisdiccion_aplicacion == provincia, models.Vacuna.vacuna == vacuna, models.Vacuna.orden_dosis == dosis, models.Vacuna.fecha_aplicacion == fecha).count()
+
+
+
+
