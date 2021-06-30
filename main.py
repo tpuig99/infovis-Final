@@ -1,4 +1,6 @@
 from typing import List, Optional
+
+from sqlalchemy.sql.sqltypes import Boolean
 from fastapi import Depends, FastAPI, Query, Path
 from sqlalchemy.orm import Session
 from starlette.responses import RedirectResponse
@@ -31,7 +33,9 @@ tags_metadata = [
     {"name": "Vacunas por vacuna y otro factor",
         "description": "Obtiene las vacunas filtradas por la vacuna y: dosis, provincia, condicion y dosis, provincia y dosis."},
     {"name": "Vacunas por provincia de residencia y provincia de jurisdiccion",
-        "description": "Obtiene las vacunas filtradas por la provincia de residencia y la provincia de aplicacion"}
+        "description": "Obtiene las vacunas filtradas por la provincia de residencia y la provincia de aplicacion"},
+    {"name": "Vacunas con provincia de residencia y provincia de aplicacion iguales o no",
+        "description": "Obtiene las vacunas filtradas por provincia de aplicacion igual o no a la provincia de residencia"},
 ]
 
 
@@ -173,6 +177,8 @@ def read_vacunas(age: models.ModelAge, condition: models.ModelCondiciones, db: S
     vacunas = crud.get_vacuna_by_age_condition_count(db, age, condition)
     return vacunas
 
+## Provincia Aplicacion y Provincia Residencia
+
 @app.get("/vacunas/provincia/{provincia}/provincia-aplicacion/{provincia_aplicacion}", response_model=List[schemas.Vacuna], tags=["Vacunas por provincia de residencia y provincia de jurisdiccion"])
 def read_vacunas(provincia: models.ModelProvince, provincia_aplicacion: models.ModelProvince, skip: int = 0, limit: Optional[int] = Query(None, description="No es un campo obligatorio, sin embargo por la gran cantidad de datos recomendamos darle uso."), db: Session = Depends(get_db)):
     vacunas = crud.get_vacuna_by_provincia_application_provincia(db, provincia, provincia_aplicacion, limit=limit, skip=skip)
@@ -181,6 +187,18 @@ def read_vacunas(provincia: models.ModelProvince, provincia_aplicacion: models.M
 @app.get("/vacunas/provincia/{provincia}/provincia-aplicacion/{provincia_aplicacion}/count", tags=["Vacunas por provincia de residencia y provincia de jurisdiccion"])
 def read_vacunas(provincia: models.ModelProvince, provincia_aplicacion: models.ModelProvince, db: Session = Depends(get_db)):
     count = crud.get_vacuna_by_provincia_application_provincia_count(db, provincia, provincia_aplicacion)
+    return count
+  
+## Provincia Aplicacion ==? Provincia Residencia
+
+@app.get("/vacunas/provincia/{equals}", response_model=List[schemas.Vacuna], tags=["Vacunas con provincia de residencia y provincia de aplicacion iguales o no"])
+def read_vacunas(equals: bool, skip: int = 0, limit: Optional[int] = Query(None, description="No es un campo obligatorio, sin embargo por la gran cantidad de datos recomendamos darle uso."), db: Session = Depends(get_db)):
+    vacunas = crud.get_vacuna_by_provincia_equals(db, equals, limit=limit, skip=skip)
+    return vacunas  
+
+@app.get("/vacunas/provincia/{equals}/count", tags=["Vacunas con provincia de residencia y provincia de aplicacion iguales o no"])
+def read_vacunas(equals: bool, db: Session = Depends(get_db)):
+    count = crud.get_vacuna_by_provincia_equals_count(db, equals)
     return count
   
 

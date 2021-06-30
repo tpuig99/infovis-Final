@@ -1,5 +1,6 @@
 from typing import Optional
 from sqlalchemy.orm import Session
+from sqlalchemy.sql.sqltypes import Boolean
 from . import models, schemas
 
 #########################   Individual metrics #########################
@@ -116,6 +117,22 @@ def get_vacuna_by_provincia_application_provincia(db: Session, provincia: models
 
 def get_vacuna_by_provincia_application_provincia_count(db: Session, provincia: models.ModelProvince, provincia_aplicacion: models.ModelProvince):
     return db.query(models.Vacuna.id).filter(models.Vacuna.jurisdiccion_residencia == provincia, models.Vacuna.jurisdiccion_aplicacion == provincia_aplicacion).count()
+
+# Provincia de residencia == Provincia de Aplicacion ?
+def get_vacuna_by_provincia_equals_count(db: Session, equals: bool, skip: int = 0, limit: Optional[int] = None):
+    if equals:
+        return db.query(models.Vacuna).filter(models.Vacuna.jurisdiccion_residencia_id == models.Vacuna.jurisdiccion_aplicacion_id).count()
+    return db.query(models.Vacuna).filter(models.Vacuna.jurisdiccion_residencia_id != models.Vacuna.jurisdiccion_aplicacion_id).count() 
+
+def get_vacuna_by_provincia_equals(db: Session, equals: bool, skip: int = 0, limit: Optional[int] = None):
+    if limit:
+        if equals:
+            return db.query(models.Vacuna).filter(models.Vacuna.jurisdiccion_residencia_id == models.Vacuna.jurisdiccion_aplicacion_id).order_by(models.Vacuna.id).offset(skip).limit(limit).all()
+        else:
+             return db.query(models.Vacuna).filter(models.Vacuna.jurisdiccion_residencia_id != models.Vacuna.jurisdiccion_aplicacion_id).order_by(models.Vacuna.id).offset(skip).limit(limit).all()  
+    if equals:
+        return db.query(models.Vacuna).filter(models.Vacuna.jurisdiccion_residencia_id == models.Vacuna.jurisdiccion_aplicacion_id).all()
+    return db.query(models.Vacuna).filter(models.Vacuna.jurisdiccion_residencia_id != models.Vacuna.jurisdiccion_aplicacion_id).all()
 
 
 def get_vacuna_by_age_provincia(db: Session, age: str, provincia: str, skip: int = 0, limit: Optional[int] = None):
