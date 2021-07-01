@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from starlette.responses import RedirectResponse
 from sql_app import crud, models, schemas
 from sql_app.database import SessionLocal, engine
+from fastapi.middleware.cors import CORSMiddleware
 
 ############ Endpoints Description #############
 tags_metadata = [
@@ -44,6 +45,16 @@ app = FastAPI(
     title="Final Infovis - Vacunas COVID19",
     description="Esta API permite obtener información acerca de la vacunación por el COVID19 en Argentina.",
     openapi_tags=tags_metadata)
+
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 # Dependency
