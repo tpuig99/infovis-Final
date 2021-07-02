@@ -96,6 +96,12 @@ def read_vacunas(sex: models.ModelSex, db: Session = Depends(get_db)):
     return vacunas
 
 
+@app.get("/vacunas/sex/count/all", tags=["Vacunas solo por sexo"])
+def read_vacunas(db: Session = Depends(get_db)):
+    vacunas = crud.get_vacuna_by_all_sex_count(db)
+    return vacunas
+
+
 # Condition
 @app.get("/vacunas/condition/{condition}", response_model=List[schemas.Vacuna], tags=["Vacunas solo por condicion"])
 def read_vacunas(condition: models.ModelCondiciones, skip: int = 0, limit: Optional[int] = Query(None, description="No es un campo obligatorio, sin embargo por la gran cantidad de datos recomendamos darle uso."), db: Session = Depends(get_db)):
@@ -148,6 +154,12 @@ def read_vacunas(provincia: models.ModelProvince, db: Session = Depends(get_db))
     return vacunas
 
 
+@app.get("/vacunas/provincia/aplicacion/count/all", tags=["Vacunas solo por provincia donde se aplició la dosis"])
+def read_vacunas(db: Session = Depends(get_db)):
+    vacunas = crud.get_vacuna_by_all_aplication_provincia_count(db)
+    return vacunas
+
+
 # Vaccine brand/type
 @app.get("/vacunas/marca/{marca}", response_model=List[schemas.Vacuna], tags=["Vacunas solo por marca de vacuna suministrada"])
 def read_vacunas(marca: models.ModelVacunas, skip: int = 0, limit: Optional[int] = Query(None, description="No es un campo obligatorio, sin embargo por la gran cantidad de datos recomendamos darle uso."), db: Session = Depends(get_db)):
@@ -158,6 +170,12 @@ def read_vacunas(marca: models.ModelVacunas, skip: int = 0, limit: Optional[int]
 @app.get("/vacunas/marca/{marca}/count", tags=["Vacunas solo por marca de vacuna suministrada"])
 def read_vacunas(marca: models.ModelVacunas, db: Session = Depends(get_db)):
     vacunas = crud.get_vacuna_by_marca_count(db, marca)
+    return vacunas
+
+
+@app.get("/vacunas/marca/count/all", tags=["Vacunas solo por marca de vacuna suministrada"])
+def read_vacunas(db: Session = Depends(get_db)):
+    vacunas = crud.get_vacuna_by_all_marca_count(db)
     return vacunas
 
 

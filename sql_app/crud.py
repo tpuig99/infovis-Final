@@ -15,6 +15,10 @@ def get_vacuna_by_sex_count(db: Session, sex: str):
     return db.query(models.Vacuna.id).filter(models.Vacuna.sexo == sex).count()
 
 
+def get_vacuna_by_all_sex_count(db: Session):
+    return db.execute("select sexo, count (sexo) from vacunas group by sexo").all()
+
+
 ## Condition ##
 def get_vacuna_by_condition(db: Session, condition: str, skip: int = 0, limit: Optional[int] = None):
     if limit:
@@ -59,6 +63,13 @@ def get_vacuna_by_aplication_provincia_count(db: Session, provincia: str):
     return db.query(models.Vacuna.id).filter(models.Vacuna.jurisdiccion_aplicacion == provincia).count()
 
 
+
+def get_vacuna_by_all_aplication_provincia_count(db: Session):
+    return db.execute("select jurisdiccion_aplicacion, count (jurisdiccion_aplicacion) from vacunas group by jurisdiccion_aplicacion").all()
+
+
+
+
 ## Vaccine type ##
 def get_vacuna_by_marca(db: Session, marca: str, skip: int = 0, limit: Optional[int] = None):
     if limit:
@@ -68,6 +79,12 @@ def get_vacuna_by_marca(db: Session, marca: str, skip: int = 0, limit: Optional[
 
 def get_vacuna_by_marca_count(db: Session, marca: str):
     return db.query(models.Vacuna.id).filter(models.Vacuna.vacuna == marca).count()
+
+
+def get_vacuna_by_all_marca_count(db: Session):
+    return db.execute("select vacuna, count (vacuna) from vacunas group by vacuna").all()
+
+
 
 
 ## Dosis ##

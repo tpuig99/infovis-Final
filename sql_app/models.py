@@ -40,6 +40,7 @@ class ModelCondiciones(str, Enum):
 class ModelSex(str, Enum):
     femenino = "F"
     masculino = "M"
+    sin_informar = "S.I."
 
 
 class ModelVacunas(str, Enum):
