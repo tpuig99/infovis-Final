@@ -115,6 +115,12 @@ def read_vacunas(condition: models.ModelCondiciones, db: Session = Depends(get_d
     return vacunas
 
 
+@app.get("/vacunas/condition/count/all", tags=["Vacunas solo por condicion"])
+def read_vacunas(db: Session = Depends(get_db)):
+    vacunas = crud.get_vacuna_by_all_condition_count(db)
+    return vacunas
+
+
 # Age
 @app.get("/vacunas/age/{age}", response_model=List[schemas.Vacuna], tags=["Vacunas solo por edad"])
 def read_vacunas(age: models.ModelAge, skip: int = 0, limit: Optional[int] = Query(None, description="No es un campo obligatorio, sin embargo por la gran cantidad de datos recomendamos darle uso."), db: Session = Depends(get_db)):
@@ -128,6 +134,12 @@ def read_vacunas(age: models.ModelAge, db: Session = Depends(get_db)):
     return vacunas
 
 
+@app.get("/vacunas/age/count/all", tags=["Vacunas solo por edad"])
+def read_vacunas(db: Session = Depends(get_db)):
+    vacunas = crud.get_vacuna_by_all_age_count(db)
+    return vacunas
+
+
 # Residence Province
 @app.get("/vacunas/provincia/{provincia}/residencia", response_model=List[schemas.Vacuna], tags=["Vacunas solo por provincia de residencia"])
 def read_vacunas(provincia: models.ModelProvince, skip: int = 0, limit: Optional[int] = Query(None, description="No es un campo obligatorio, sin embargo por la gran cantidad de datos recomendamos darle uso."), db: Session = Depends(get_db)):
@@ -138,6 +150,12 @@ def read_vacunas(provincia: models.ModelProvince, skip: int = 0, limit: Optional
 @app.get("/vacunas/provincia/{provincia}/residencia/count", tags=["Vacunas solo por provincia de residencia"])
 def read_vacunas(provincia: models.ModelProvince, db: Session = Depends(get_db)):
     vacunas = crud.get_vacuna_by_residence_provincia_count(db, provincia)
+    return vacunas
+
+
+@app.get("/vacunas/provincia/residencia/count/all", tags=["Vacunas solo por provincia de residencia"])
+def read_vacunas(db: Session = Depends(get_db)):
+    vacunas = crud.get_vacuna_by_all_residence_provincia_count(db)
     return vacunas
 
 
@@ -189,6 +207,12 @@ def read_vacunas(dosis: models.ModelDosis, skip: int = 0, limit: Optional[int] =
 @app.get("/vacunas/dosis/{dosis}/count", tags=["Vacunas solo por número de dosis"])
 def read_vacunas(dosis: models.ModelDosis, db: Session = Depends(get_db)):
     vacunas = crud.get_vacuna_by_dosis_count(db, dosis)
+    return vacunas
+
+
+@app.get("/vacunas/dosis/count/all", tags=["Vacunas solo por número de dosis"])
+def read_vacunas(db: Session = Depends(get_db)):
+    vacunas = crud.get_vacuna_by_all_dosis_count(db)
     return vacunas
 
 

@@ -30,6 +30,10 @@ def get_vacuna_by_condition_count(db: Session, condition: str):
     return db.query(models.Vacuna.id).filter(models.Vacuna.condicion_aplicacion == condition).count()
 
 
+def get_vacuna_by_all_condition_count(db: Session):
+    return db.execute("select condicion_aplicacion, count (condicion_aplicacion) from vacunas group by condicion_aplicacion").all()
+
+
 ## Age ##
 def get_vacuna_by_age(db: Session, age: str, skip: int = 0, limit: Optional[int] = None):
     if limit:
@@ -39,6 +43,10 @@ def get_vacuna_by_age(db: Session, age: str, skip: int = 0, limit: Optional[int]
 
 def get_vacuna_by_age_count(db: Session, age: str):
     return db.query(models.Vacuna.id).filter(models.Vacuna.grupo_etario == age).count()
+
+
+def get_vacuna_by_all_age_count(db: Session):
+    return db.execute("select grupo_etario, count (grupo_etario) from vacunas group by grupo_etario").all()
 
 
 ## Provincia de residencia ##
@@ -52,6 +60,10 @@ def get_vacuna_by_residence_provincia_count(db: Session, provincia: str):
     return db.query(models.Vacuna.id).filter(models.Vacuna.jurisdiccion_residencia == provincia).count()
 
 
+def get_vacuna_by_all_residence_provincia_count(db: Session):
+    return db.execute("select jurisdiccion_residencia, count (jurisdiccion_residencia) from vacunas group by jurisdiccion_residencia").all()
+
+
 ## Provincia de aplicacion ##
 def get_vacuna_by_aplication_provincia(db: Session, provincia: str, skip: int = 0, limit: Optional[int] = None):
     if limit:
@@ -63,11 +75,8 @@ def get_vacuna_by_aplication_provincia_count(db: Session, provincia: str):
     return db.query(models.Vacuna.id).filter(models.Vacuna.jurisdiccion_aplicacion == provincia).count()
 
 
-
 def get_vacuna_by_all_aplication_provincia_count(db: Session):
     return db.execute("select jurisdiccion_aplicacion, count (jurisdiccion_aplicacion) from vacunas group by jurisdiccion_aplicacion").all()
-
-
 
 
 ## Vaccine type ##
@@ -85,8 +94,6 @@ def get_vacuna_by_all_marca_count(db: Session):
     return db.execute("select vacuna, count (vacuna) from vacunas group by vacuna").all()
 
 
-
-
 ## Dosis ##
 def get_vacuna_by_dosis(db: Session, dosis: int, skip: int = 0, limit: Optional[int] = None):
     if limit:
@@ -96,6 +103,10 @@ def get_vacuna_by_dosis(db: Session, dosis: int, skip: int = 0, limit: Optional[
 
 def get_vacuna_by_dosis_count(db: Session, dosis: int):
     return db.query(models.Vacuna.id).filter(models.Vacuna.orden_dosis == dosis).count()
+
+
+def get_vacuna_by_all_dosis_count(db: Session):
+    return db.execute("select orden_dosis, count (orden_dosis) from vacunas group by orden_dosis").all()
 
 
 ## Misc ##
