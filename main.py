@@ -130,7 +130,7 @@ def read_vacunas(age: models.ModelAge, skip: int = 0, limit: Optional[int] = Que
 
 @app.get("/vacunas/age/{age}/count", tags=["Vacunas solo por edad"])
 def read_vacunas(age: models.ModelAge, db: Session = Depends(get_db)):
-    vacunas = crud.get_vacuna_by_sex_count(db, age)
+    vacunas = crud.get_vacuna_by_age_count(db, age)
     return vacunas
 
 
@@ -387,7 +387,7 @@ def read_vacunas(dosis: models.ModelDosis, vacuna: models.ModelVacunas, provinci
 
 
 @app.get("/vacunas/vacuna/{vacuna}/dosis/{dosis}/provincia/{provincia}/count", tags=["Vacunas por vacuna y otro factor"])
-def read_vacunas(dosis: models.ModelDosis, vacuna: models.ModelVacunas, provincia=str, db: Session = Depends(get_db)):
+def read_vacunas(dosis: models.ModelDosis, vacuna: models.ModelVacunas, provincia: models.ModelProvince, db: Session = Depends(get_db)):
     vacunas = crud.get_vacuna_by_vacuna_dosis_provincia_count(db, dosis, vacuna, provincia)
     return vacunas
 
